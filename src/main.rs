@@ -37,5 +37,8 @@ fn setup(mut commands: Commands) {
 
 fn main() {
     println!("Commence Endgame 🚀");
-    App::new().add_plugins(DefaultPlugins).run();
+    App::new()
+        .add_plugins(DefaultPlugins)
+        .add_systems(Startup, setup)
+        .run();
 }

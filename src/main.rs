@@ -1,3 +1,6 @@
+use bevy::prelude::*;
+
 fn main() {
-    println!("Hello, world!");
+    println!("Commence Endgame 🚀");
+    App::new().add_plugins(DefaultPlugins).run();
 }

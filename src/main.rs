@@ -3,6 +3,7 @@ use bevy::{input::keyboard::KeyboardInput, prelude::*, sprite::Anchor};
 const GROUND_LEVEL: f32 = -100.0;
 const PLAYER_X: f32 = -300.0;
 const JUMP_FORCE: f32 = 600.0;
+const GRAVITY: f32 = -800.0;
 
 #[derive(Component)]
 struct Player;
@@ -65,11 +66,17 @@ fn player_movement(
     }
 }
 
+fn gravity(time: Res<Time>, mut query: Query<&mut Velocity, With<Player>>) {
+    for mut velocity in query.iter_mut() {
+        velocity.0.y += GRAVITY * time.delta_secs();
+    }
+}
+
 fn main() {
     println!("Commence Endgame 🚀");
     App::new()
         .add_plugins(DefaultPlugins)
         .add_systems(Startup, setup)
-        .add_systems(Update, (jump, player_movement))
+        .add_systems(Update, (jump, gravity, player_movement))
         .run();
 }

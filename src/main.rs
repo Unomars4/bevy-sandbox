@@ -52,6 +52,19 @@ fn jump(
     }
 }
 
+fn player_movement(
+    time: Res<Time>,
+    mut query: Query<(&mut Velocity, &mut Transform), With<Player>>,
+) {
+    for (mut velocity, mut transform) in query.iter_mut() {
+        transform.translation.y += velocity.0.y * time.delta_secs();
+        if transform.translation.y <= GROUND_LEVEL {
+            transform.translation.y = GROUND_LEVEL;
+            velocity.0.y = 0.0;
+        }
+    }
+}
+
 fn main() {
     println!("Commence Endgame 🚀");
     App::new()

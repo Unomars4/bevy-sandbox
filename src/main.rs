@@ -70,6 +70,6 @@ fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
         .add_systems(Startup, setup)
-        .add_systems(Update, jump)
+        .add_systems(Update, (jump, player_movement))
         .run();
 }

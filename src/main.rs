@@ -1,7 +1,8 @@
-use bevy::{prelude::*, sprite::Anchor};
+use bevy::{input::keyboard::KeyboardInput, prelude::*, sprite::Anchor};
 
 const GROUND_LEVEL: f32 = -100.0;
 const PLAYER_X: f32 = -300.0;
+const JUMP_FORCE: f32 = 600.0;
 
 #[derive(Component)]
 struct Player;
@@ -35,10 +36,27 @@ fn setup(mut commands: Commands) {
     ));
 }
 
+fn jump(
+    mut events: EventReader<KeyboardInput>,
+    mut query: Query<(&mut Velocity, &Transform), With<Player>>,
+) {
+    for e in events.read() {
+        if let Ok((mut velocity, transfrom)) = query.get_single_mut() {
+            if e.state.is_pressed()
+                && e.key_code == KeyCode::Space
+                && transfrom.translation.y <= GROUND_LEVEL
+            {
+                velocity.0.y = JUMP_FORCE;
+            }
+        }
+    }
+}
+
 fn main() {
     println!("Commence Endgame 🚀");
     App::new()
         .add_plugins(DefaultPlugins)
         .add_systems(Startup, setup)
+        .add_systems(Update, jump)
         .run();
 }
